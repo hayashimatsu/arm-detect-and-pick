@@ -2,7 +2,11 @@
 
 > 中文版：[README-zh.md](README-zh.md)
 
-**Goal**: In Isaac Sim, an NHC12 arm (Robotiq 2F-85 gripper and a D455 camera on the wrist) finds blocks of a chosen type on a table and puts them into a basket one by one.
+## Goal
+
+**Demo video** (Google Drive): [▶ Watch the arm detect and pick](https://drive.google.com/file/d/14voByrd4BVBHa-EldbXiBFaAfeXDhiZS/view?usp=sharing)
+
+In Isaac Sim, an NHC12 arm (Robotiq 2F-85 gripper and a D455 camera on the wrist) finds blocks of a chosen type on a table and puts them into a basket one by one.
 - There are four block types: `cube`, `cuboid`, `cylinder`, `sphere`.
 - After taking a picture, YOLO gives the type. Depth gives the world position of each object.
 - The object nearest to the camera is picked first. The scene is re-photographed after every pick.
@@ -49,8 +53,8 @@ detect_pick("sphere")      # pick all spheres on the table into the basket, then
 ## `detect()`: what it does and what to expect
 
 Example run: [`outputs/oneclick/20260930_181331/index.html`](outputs/oneclick/20260930_181331/index.html)
-(GitHub shows HTML as source. To view it as a page, download the repo or use the
-[preview link](https://htmlpreview.github.io/?https://github.com/hayashimatsu/arm-detect-and-pick/blob/main/outputs/oneclick/20260930_181331/index.html).)
+(GitHub shows HTML as source. To view it as a page with images, use the
+[preview link](https://raw.githack.com/hayashimatsu/arm-detect-and-pick/main/outputs/oneclick/20260930_181331/index.html).)
 
 ![detect() result, view A](outputs/oneclick/20260930_181331/overlay.png)
 
@@ -80,8 +84,6 @@ Example run: [`outputs/oneclick/20260930_181331/index.html`](outputs/oneclick/20
 | Augmentation | Small color shift (hsv 0.015 / 0.4 / 0.2), translate 0.1, scale 0.2, horizontal flip 0.5. No rotation, no mosaic |
 | Final validation (epoch 100) | Mask: precision 0.83, recall 0.85, mAP50 0.885, mAP50-95 0.820 (`models/train_results.csv`, curves and `models/confusion_matrix.png`) |
 
-### What we expect, and what this run shows
-
 - **Expected**: for blocks 20–60 mm on this table, seen from view A (inside the training camera range), YOLO gives the right class with high confidence and a mask that follows the outline. Cube and cuboid can be mixed up (the same face can look square), so the depth edge ratio decides between them. Views far from the training range (closer, more tilted) are worse, not better.
 - **Accuracy over 163 test objects** (14 random layouts): all objects found, all classes correct, center error at most 1.2 mm.
 - **This run** (9 objects, 14.6 s in total):
@@ -107,7 +109,7 @@ More files in the run folder: `result.json` (all numbers, per view), `view_A/`, 
 ## `detect_pick()`: before and after
 
 Example run: [`outputs/pick/20260930_181324/index.html`](outputs/pick/20260930_181324/index.html)
-([preview link](https://htmlpreview.github.io/?https://github.com/hayashimatsu/arm-detect-and-pick/blob/main/outputs/pick/20260930_181324/index.html)).
+([preview link](https://raw.githack.com/hayashimatsu/arm-detect-and-pick/main/outputs/pick/20260930_181324/index.html)).
 The call was `detect_pick("sphere")`. It repeated `detect()` → `pick()` until no sphere was left.
 **Result: 3 / 3 spheres in the basket, no errors, 195 s.**
 
@@ -119,7 +121,7 @@ The full report also has the wrist photo of each pick over the basket, the grasp
 
 ## How it works
 
-**Picking (`pick()`)**
+### Picking (`pick()`)
 - Grasp direction: fingers point straight down and close on the short side. If a finger would hit a neighbor, the yaw is changed (±15°, ±30°, 90°; every 15° for round objects). If nothing works, the object is skipped.
 - Grasp height: object center; lower for short objects so the pads touch solid material. It also allows for the fingertips moving down 8–13 mm when they close, so the pads do not hit the table first.
 - Closing: (1) close at once to the angle where each pad is 3 mm from the object, using the detected width (fast); (2) then 1° at a time, waiting for the fingers to follow. The first time a finger lags by ≥ 1°, it has touched the object, and the force is still small; (3) then close only 5° more, again step by step, so the force is small and constant. It never closes with full force, so the pads do not press into a sphere or box. The report records pad gap and object width for each grasp, so the grip depth can be read directly.
@@ -127,20 +129,7 @@ The full report also has the wrist photo of each pick over the basket, the grasp
 - Carrying: after grasping, the first 12 cm above the table is lifted slowly; after that the arm moves at the same speed as when approaching. Finger closure is checked after each move.
 - Placing: a depth image of the basket is taken from above, and the empty cell nearest to the arm is chosen.
 
-**Knowing when a task did not finish**: the error report at the top of the report lists each problem with "what happened / likely cause / what was decided".
-
-| Type | Meaning | What the program does |
-|---|---|---|
-| Fewer in basket than expected | Targets in the basket < targets on the table | Lists each missing object with its reason |
-| wrong_class | The object picked is not the requested class | Records it, puts it in the basket, continues |
-| missed_grasp | The gripper closed on nothing | Re-photograph and retry; 2 failures at the same place → skip |
-| dropped | Dropped during lift or carry | Re-photograph and retry; same as above |
-| not_in_basket | Not in the basket after release | Records it |
-| skipped (blocked) | At every tried angle the fingers would hit a neighbor | Skips it and reports |
-
-**When stuck**: the `error` field of `status()` has the reason (with the Python traceback). In the progress files `outputs/pick/latest_status.json` and `outputs/oneclick/latest_status.json`, `step` is where it stopped (for example `pick2:lift`).
-
-## Flowchart: `detect_pick(target)`
+### `detect_pick(target)`
 
 ```mermaid
 flowchart TD
@@ -157,6 +146,23 @@ flowchart TD
 | `detect()` | `demo_start.py` has run | Object list (id, class, confidence, world position) + report `outputs/oneclick/<time>/` |
 | `pick(target)` | Latest `detect()` result (table not touched since) | One object in the basket + pick report `outputs/pick/<time>/` (wrist photos, front photos, error report) |
 | `detect_pick(target)` | `demo_start.py` has run | The loop above, one pick report |
+
+### Knowing when a task did not finish
+
+ the error report at the top of the report lists each problem with "what happened / likely cause / what was decided".
+
+| Type | Meaning | What the program does |
+|---|---|---|
+| Fewer in basket than expected | Targets in the basket < targets on the table | Lists each missing object with its reason |
+| wrong_class | The object picked is not the requested class | Records it, puts it in the basket, continues |
+| missed_grasp | The gripper closed on nothing | Re-photograph and retry; 2 failures at the same place → skip |
+| dropped | Dropped during lift or carry | Re-photograph and retry; same as above |
+| not_in_basket | Not in the basket after release | Records it |
+| skipped (blocked) | At every tried angle the fingers would hit a neighbor | Skips it and reports |
+
+### When stuck
+
+ the `error` field of `status()` has the reason (with the Python traceback). In the progress files `outputs/pick/latest_status.json` and `outputs/oneclick/latest_status.json`, `step` is where it stopped (for example `pick2:lift`).
 
 ## Folder layout
 
