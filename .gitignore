@@ -1,0 +1,16 @@
+outputs/*
+!outputs/oneclick/
+outputs/oneclick/*
+!outputs/oneclick/20260930_181331/
+!outputs/oneclick/20260930_181431/
+!outputs/oneclick/20260930_181528/
+!outputs/pick/
+outputs/pick/*
+!outputs/pick/20260930_181324/
+perception/.venv/
+__pycache__/
+*.pyc
+STATUS.md
+CLAUDE.md
+AGENTS.md
+docs/

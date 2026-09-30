@@ -1,0 +1,8 @@
+names:
+  0: cube
+  1: cuboid
+  2: cylinder
+  3: sphere
+path: outputs/T005/training_comparison_20260910_r1/data
+train: outputs/T005/training_comparison_20260910_r1/data/O31_ABC297.txt
+val: outputs/T005/training_comparison_20260910_r1/data/val.txt

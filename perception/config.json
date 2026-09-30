@@ -1,0 +1,123 @@
+{
+  "yolo_python": "perception/.venv/bin/python",
+  "yolo_python_note": "This folder's own environment; if broken, run bash perception/setup_yolo_env.sh to rebuild it",
+  "model": "models/best.pt",
+  "port": 18777,
+  "conf": 0.25,
+  "imgsz": 640,
+  "table_z_m": 0.5952,
+  "workspace_x_m": [
+    -0.795,
+    -0.285
+  ],
+  "workspace_y_m": [
+    -0.175,
+    0.175
+  ],
+  "view_pose_A": {
+    "note": "A1 pose used by the 9/16 one-click run (IK target world coordinates)",
+    "position_m": [
+      -0.48764960037274263,
+      -0.18372626195048838,
+      1.0238689000831385
+    ],
+    "quaternion_wxyz": [
+      -0.12867782290114826,
+      0.6953982386850476,
+      0.6951670875984511,
+      0.12886437772729
+    ]
+  },
+  "move_steps": 40,
+  "converge_pos_m": 0.003,
+  "converge_rot_rad": 0.05,
+  "converge_max_frames": 900,
+  "views": [
+    {
+      "name": "A"
+    },
+    {
+      "name": "B",
+      "position_m": [
+        -0.265034450312424,
+        -0.11456355447027126,
+        0.85
+      ],
+      "quaternion_wxyz": [
+        -0.1530459187330308,
+        0.6903455270798549,
+        0.6903455270798549,
+        -0.15304591873303106
+      ],
+      "note": "user-chosen 2nd view (2026-09-28 18:49): IK target translate (-0.265,-0.115,0.85), orient (180,-25,-90); only visited when view A has conf < 0.7 or an unexplained depth region"
+    }
+  ],
+  "match_xy_m": 0.03,
+  "pixel_center_offset": 0.5,
+  "palette_bgr": [
+    [
+      66,
+      135,
+      245
+    ],
+    [
+      60,
+      60,
+      235
+    ],
+    [
+      80,
+      220,
+      90
+    ],
+    [
+      40,
+      200,
+      245
+    ],
+    [
+      200,
+      70,
+      230
+    ],
+    [
+      230,
+      210,
+      60
+    ],
+    [
+      0,
+      140,
+      255
+    ],
+    [
+      180,
+      105,
+      255
+    ],
+    [
+      160,
+      160,
+      40
+    ],
+    [
+      255,
+      120,
+      120
+    ],
+    [
+      90,
+      90,
+      150
+    ],
+    [
+      200,
+      255,
+      120
+    ]
+  ],
+  "class_from_second_view_below_conf": 0.7,
+  "candidate_conf": 0.05,
+  "second_view_policy": "on_low_conf",
+  "detection_region_margin_m": 0.06
+}

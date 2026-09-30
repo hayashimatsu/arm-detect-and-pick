@@ -1,0 +1,1267 @@
+{
+  "run_id": "20260930_181331",
+  "objects": [
+    {
+      "id": 1,
+      "class_name": "sphere",
+      "conf": 0.9905,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.70053,
+        0.02641,
+        0.62002
+      ],
+      "center_from_view": "A",
+      "height_mm": 49.6,
+      "per_view": {
+        "A": {
+          "class_name": "sphere",
+          "yolo_class": "sphere",
+          "conf": 0.9905,
+          "center_xyz_m": [
+            -0.70053,
+            0.02641,
+            0.62002
+          ],
+          "height_mm": 49.6,
+          "shape_check": null
+        },
+        "B": {
+          "class_name": "sphere",
+          "yolo_class": "sphere",
+          "conf": 0.9878,
+          "center_xyz_m": [
+            -0.70123,
+            0.0261,
+            0.62017
+          ],
+          "height_mm": 49.9,
+          "shape_check": null
+        }
+      }
+    },
+    {
+      "id": 2,
+      "class_name": "cube",
+      "conf": 0.9834,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.66875,
+        -0.0708,
+        0.61522
+      ],
+      "center_from_view": "A",
+      "height_mm": 40.0,
+      "per_view": {
+        "A": {
+          "class_name": "cube",
+          "yolo_class": "cube",
+          "conf": 0.9834,
+          "center_xyz_m": [
+            -0.66875,
+            -0.0708,
+            0.61522
+          ],
+          "height_mm": 40.0,
+          "shape_check": {
+            "box_dims_mm": [
+              40.0,
+              39.9,
+              40.0
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        },
+        "B": {
+          "class_name": "cube",
+          "yolo_class": "cube",
+          "conf": 0.784,
+          "center_xyz_m": [
+            -0.66873,
+            -0.07077,
+            0.61523
+          ],
+          "height_mm": 40.1,
+          "shape_check": {
+            "box_dims_mm": [
+              40.0,
+              39.9,
+              40.1
+            ],
+            "edge_ratio": 1.01,
+            "shape_class": "cube"
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "class_name": "cylinder",
+      "conf": 0.9763,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.41499,
+        0.01086,
+        0.61022
+      ],
+      "center_from_view": "A",
+      "height_mm": 30.0,
+      "per_view": {
+        "A": {
+          "class_name": "cylinder",
+          "yolo_class": "cylinder",
+          "conf": 0.9763,
+          "center_xyz_m": [
+            -0.41499,
+            0.01086,
+            0.61022
+          ],
+          "height_mm": 30.0,
+          "shape_check": null
+        },
+        "B": {
+          "class_name": "cylinder",
+          "yolo_class": "cylinder",
+          "conf": 0.9708,
+          "center_xyz_m": [
+            -0.41478,
+            0.01102,
+            0.61022
+          ],
+          "height_mm": 30.0,
+          "shape_check": null
+        }
+      }
+    },
+    {
+      "id": 4,
+      "class_name": "sphere",
+      "conf": 0.9726,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.56802,
+        0.06395,
+        0.61508
+      ],
+      "center_from_view": "A",
+      "height_mm": 39.8,
+      "per_view": {
+        "A": {
+          "class_name": "sphere",
+          "yolo_class": "sphere",
+          "conf": 0.9726,
+          "center_xyz_m": [
+            -0.56802,
+            0.06395,
+            0.61508
+          ],
+          "height_mm": 39.8,
+          "shape_check": null
+        },
+        "B": {
+          "class_name": "sphere",
+          "yolo_class": "sphere",
+          "conf": 0.9778,
+          "center_xyz_m": [
+            -0.56867,
+            0.06375,
+            0.61515
+          ],
+          "height_mm": 39.9,
+          "shape_check": null
+        }
+      }
+    },
+    {
+      "id": 5,
+      "class_name": "sphere",
+      "conf": 0.9698,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.50193,
+        0.01951,
+        0.62495
+      ],
+      "center_from_view": "A",
+      "height_mm": 59.5,
+      "per_view": {
+        "A": {
+          "class_name": "sphere",
+          "yolo_class": "sphere",
+          "conf": 0.9698,
+          "center_xyz_m": [
+            -0.50193,
+            0.01951,
+            0.62495
+          ],
+          "height_mm": 59.5,
+          "shape_check": null
+        },
+        "B": {
+          "class_name": "sphere",
+          "yolo_class": "sphere",
+          "conf": 0.6473,
+          "center_xyz_m": [
+            -0.50295,
+            0.0192,
+            0.62503
+          ],
+          "height_mm": 59.7,
+          "shape_check": null
+        }
+      }
+    },
+    {
+      "id": 6,
+      "class_name": "cylinder",
+      "conf": 0.9632,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.47038,
+        -0.07136,
+        0.61487
+      ],
+      "center_from_view": "A",
+      "height_mm": 39.3,
+      "per_view": {
+        "A": {
+          "class_name": "cylinder",
+          "yolo_class": "cylinder",
+          "conf": 0.9632,
+          "center_xyz_m": [
+            -0.47038,
+            -0.07136,
+            0.61487
+          ],
+          "height_mm": 39.3,
+          "shape_check": null
+        },
+        "B": {
+          "class_name": "cylinder",
+          "yolo_class": "cylinder",
+          "conf": 0.9584,
+          "center_xyz_m": [
+            -0.47017,
+            -0.07147,
+            0.61474
+          ],
+          "height_mm": 39.1,
+          "shape_check": null
+        }
+      }
+    },
+    {
+      "id": 7,
+      "class_name": "cuboid",
+      "conf": 0.9477,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.60168,
+        -0.09815,
+        0.60522
+      ],
+      "center_from_view": "A",
+      "height_mm": 20.0,
+      "per_view": {
+        "A": {
+          "class_name": "cuboid",
+          "yolo_class": "cuboid",
+          "conf": 0.9477,
+          "center_xyz_m": [
+            -0.60168,
+            -0.09815,
+            0.60522
+          ],
+          "height_mm": 20.0,
+          "shape_check": {
+            "box_dims_mm": [
+              60.0,
+              40.0,
+              20.0
+            ],
+            "edge_ratio": 3.0,
+            "shape_class": "cuboid"
+          }
+        },
+        "B": {
+          "class_name": "cuboid",
+          "yolo_class": "cuboid",
+          "conf": 0.9823,
+          "center_xyz_m": [
+            -0.60168,
+            -0.09819,
+            0.60523
+          ],
+          "height_mm": 20.1,
+          "shape_check": {
+            "box_dims_mm": [
+              59.9,
+              40.0,
+              20.1
+            ],
+            "edge_ratio": 2.98,
+            "shape_class": "cuboid"
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "class_name": "cube",
+      "conf": 0.9446,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.24999,
+        -0.00029,
+        0.62023
+      ],
+      "center_from_view": "A",
+      "height_mm": 50.1,
+      "per_view": {
+        "A": {
+          "class_name": "cube",
+          "yolo_class": "cube",
+          "conf": 0.9446,
+          "center_xyz_m": [
+            -0.24999,
+            -0.00029,
+            0.62023
+          ],
+          "height_mm": 50.1,
+          "shape_check": {
+            "box_dims_mm": [
+              50.0,
+              49.4,
+              50.1
+            ],
+            "edge_ratio": 1.01,
+            "shape_class": "cube"
+          }
+        },
+        "B": {
+          "class_name": "cube",
+          "yolo_class": "cube",
+          "conf": 0.9961,
+          "center_xyz_m": [
+            -0.25,
+            -1e-05,
+            0.62022
+          ],
+          "height_mm": 50.0,
+          "shape_check": {
+            "box_dims_mm": [
+              50.0,
+              50.0,
+              50.0
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "class_name": "cube",
+      "conf": 0.1984,
+      "class_from_view": "A",
+      "center_xyz_m": [
+        -0.4585,
+        0.09781,
+        0.62523
+      ],
+      "center_from_view": "A",
+      "height_mm": 60.1,
+      "per_view": {
+        "A": {
+          "class_name": "cube",
+          "yolo_class": "cube",
+          "conf": 0.1984,
+          "center_xyz_m": [
+            -0.4585,
+            0.09781,
+            0.62523
+          ],
+          "height_mm": 60.1,
+          "shape_check": {
+            "box_dims_mm": [
+              60.0,
+              60.0,
+              60.1
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        },
+        "B": {
+          "class_name": "cube",
+          "yolo_class": "cube",
+          "conf": 0.5582,
+          "center_xyz_m": [
+            -0.45851,
+            0.09782,
+            0.62523
+          ],
+          "height_mm": 60.1,
+          "shape_check": {
+            "box_dims_mm": [
+              60.0,
+              60.0,
+              60.1
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        }
+      }
+    }
+  ],
+  "only_in_other_views": [],
+  "views": [
+    {
+      "name": "A",
+      "arrival": {
+        "converged": true,
+        "frames": 0,
+        "error": {
+          "pos_error_norm_m": 5.489741306519136e-05,
+          "rot_error_norm_rad": 0.0,
+          "sigma_min_weighted": 0.2529008686901636,
+          "damping": 0.01,
+          "tcp_offset_world_m": [
+            2.8908252716064453e-05,
+            0.053346797823905945,
+            -0.13912272453308105
+          ],
+          "measured_command_gap_norm_rad": 0.0004666407144538851
+        }
+      },
+      "camera": {
+        "position_m": [
+          -0.5350656509399414,
+          -0.17982050776481628,
+          1.1452821493148804
+        ],
+        "right": [
+          0.9999999682054922,
+          -0.00021837561492388396,
+          0.00012609958536846143
+        ],
+        "up": [
+          0.00014469692055090074,
+          0.9064578669945235,
+          0.42229624012834865
+        ],
+        "forward": [
+          0.00020652315943404034,
+          0.4222962084554276,
+          -0.9064578697724208
+        ]
+      },
+      "detections": [
+        {
+          "id": 1,
+          "class_id": 3,
+          "class_name": "sphere",
+          "conf": 0.9905,
+          "bbox_xyxy": [
+            212.6,
+            245.8,
+            240.2,
+            273.0
+          ],
+          "mask_pixels": 623,
+          "yolo_class": "sphere",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.70053,
+            0.02641,
+            0.62002
+          ],
+          "center_method": "sphere_fit_tangent_to_table",
+          "top_z_m": 0.64356,
+          "height_mm": 49.6,
+          "visible_surface_xyz_m": [
+            -0.6956,
+            0.0196,
+            0.6368
+          ],
+          "distance_from_camera_m": 0.5881,
+          "radius_mm": 24.8
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "cube",
+          "conf": 0.9834,
+          "bbox_xyxy": [
+            220.9,
+            299.2,
+            254.0,
+            329.0
+          ],
+          "mask_pixels": 852,
+          "yolo_class": "cube",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.66875,
+            -0.0708,
+            0.61522
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.63524,
+          "height_mm": 40.0,
+          "visible_surface_xyz_m": [
+            -0.666,
+            -0.0721,
+            0.6352
+          ],
+          "distance_from_camera_m": 0.5574,
+          "top_face_size_mm": [
+            40.0,
+            39.9
+          ],
+          "top_face_yaw_deg": -4.03,
+          "footprint_size_mm": [
+            55.1,
+            50.5
+          ],
+          "footprint_yaw_deg": -4.03,
+          "top_face_points": 641,
+          "shape_check": {
+            "box_dims_mm": [
+              40.0,
+              39.9,
+              40.0
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        },
+        {
+          "id": 3,
+          "class_id": 2,
+          "class_name": "cylinder",
+          "conf": 0.9763,
+          "bbox_xyxy": [
+            370.3,
+            251.0,
+            405.2,
+            287.0
+          ],
+          "mask_pixels": 995,
+          "yolo_class": "cylinder",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.41499,
+            0.01086,
+            0.61022
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.62525,
+          "height_mm": 30.0,
+          "visible_surface_xyz_m": [
+            -0.4175,
+            0.0078,
+            0.6252
+          ],
+          "distance_from_camera_m": 0.5806,
+          "top_face_size_mm": [
+            58.1,
+            56.8
+          ],
+          "top_face_yaw_deg": -12.04,
+          "footprint_size_mm": [
+            71.3,
+            57.4
+          ],
+          "footprint_yaw_deg": 78.37,
+          "top_face_points": 846
+        },
+        {
+          "id": 4,
+          "class_id": 3,
+          "class_name": "sphere",
+          "conf": 0.9726,
+          "bbox_xyxy": [
+            292.2,
+            231.0,
+            312.0,
+            251.8
+          ],
+          "mask_pixels": 350,
+          "yolo_class": "sphere",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.56802,
+            0.06395,
+            0.61508
+          ],
+          "center_method": "sphere_fit_tangent_to_table",
+          "top_z_m": 0.63336,
+          "height_mm": 39.8,
+          "visible_surface_xyz_m": [
+            -0.5666,
+            0.0574,
+            0.6286
+          ],
+          "distance_from_camera_m": 0.5845,
+          "radius_mm": 19.9
+        },
+        {
+          "id": 5,
+          "class_id": 3,
+          "class_name": "sphere",
+          "conf": 0.9698,
+          "bbox_xyxy": [
+            321.5,
+            245.5,
+            355.7,
+            278.4
+          ],
+          "mask_pixels": 891,
+          "yolo_class": "sphere",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.50193,
+            0.01951,
+            0.62495
+          ],
+          "center_method": "sphere_fit_tangent_to_table",
+          "top_z_m": 0.65362,
+          "height_mm": 59.5,
+          "visible_surface_xyz_m": [
+            -0.5038,
+            0.0115,
+            0.6456
+          ],
+          "distance_from_camera_m": 0.5582,
+          "radius_mm": 29.8
+        },
+        {
+          "id": 6,
+          "class_id": 2,
+          "class_name": "cylinder",
+          "conf": 0.9632,
+          "bbox_xyxy": [
+            337.7,
+            297.6,
+            380.1,
+            332.0
+          ],
+          "mask_pixels": 951,
+          "yolo_class": "cylinder",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.47038,
+            -0.07136,
+            0.61487
+          ],
+          "center_method": "lying_cylinder_fit_tangent_to_table",
+          "top_z_m": 0.63411,
+          "height_mm": 39.3,
+          "visible_surface_xyz_m": [
+            -0.4718,
+            -0.075,
+            0.6313
+          ],
+          "distance_from_camera_m": 0.5452,
+          "top_face_size_mm": [
+            59.5,
+            21.0
+          ],
+          "top_face_yaw_deg": -21.93,
+          "footprint_size_mm": [
+            62.1,
+            46.9
+          ],
+          "footprint_yaw_deg": -21.88,
+          "top_face_points": 485
+        },
+        {
+          "id": 7,
+          "class_id": 1,
+          "class_name": "cuboid",
+          "conf": 0.9477,
+          "bbox_xyxy": [
+            262.1,
+            311.2,
+            295.2,
+            354.8
+          ],
+          "mask_pixels": 991,
+          "yolo_class": "cuboid",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.60168,
+            -0.09815,
+            0.60522
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.61524,
+          "height_mm": 20.0,
+          "visible_surface_xyz_m": [
+            -0.6023,
+            -0.0986,
+            0.6152
+          ],
+          "distance_from_camera_m": 0.5502,
+          "top_face_size_mm": [
+            60.0,
+            40.0
+          ],
+          "top_face_yaw_deg": -70.73,
+          "footprint_size_mm": [
+            66.6,
+            43.5
+          ],
+          "footprint_yaw_deg": -70.73,
+          "top_face_points": 944,
+          "shape_check": {
+            "box_dims_mm": [
+              60.0,
+              40.0,
+              20.0
+            ],
+            "edge_ratio": 3.0,
+            "shape_class": "cuboid"
+          }
+        },
+        {
+          "id": 8,
+          "class_id": 0,
+          "class_name": "cube",
+          "conf": 0.9446,
+          "bbox_xyxy": [
+            460.6,
+            254.3,
+            508.2,
+            291.8
+          ],
+          "mask_pixels": 1490,
+          "yolo_class": "cube",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.24999,
+            -0.00029,
+            0.62023
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.64525,
+          "height_mm": 50.1,
+          "visible_surface_xyz_m": [
+            -0.2596,
+            -0.0053,
+            0.6453
+          ],
+          "distance_from_camera_m": 0.6238,
+          "top_face_size_mm": [
+            50.0,
+            49.4
+          ],
+          "top_face_yaw_deg": -0.0,
+          "footprint_size_mm": [
+            69.4,
+            51.5
+          ],
+          "footprint_yaw_deg": 90.0,
+          "top_face_points": 895,
+          "shape_check": {
+            "box_dims_mm": [
+              50.0,
+              49.4,
+              50.1
+            ],
+            "edge_ratio": 1.01,
+            "shape_class": "cube"
+          }
+        },
+        {
+          "id": 9,
+          "class_id": 0,
+          "class_name": "cube",
+          "conf": 0.1984,
+          "bbox_xyxy": [
+            338.1,
+            195.3,
+            386.2,
+            249.1
+          ],
+          "mask_pixels": 1674,
+          "rescued": true,
+          "yolo_class": "cube",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.4585,
+            0.09781,
+            0.62523
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.65525,
+          "height_mm": 60.1,
+          "visible_surface_xyz_m": [
+            -0.4615,
+            0.0882,
+            0.6553
+          ],
+          "distance_from_camera_m": 0.5945,
+          "top_face_size_mm": [
+            60.0,
+            60.0
+          ],
+          "top_face_yaw_deg": 39.14,
+          "footprint_size_mm": [
+            94.4,
+            87.5
+          ],
+          "footprint_yaw_deg": 38.83,
+          "top_face_points": 1031,
+          "shape_check": {
+            "box_dims_mm": [
+              60.0,
+              60.0,
+              60.1
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        }
+      ],
+      "unexplained": [],
+      "outside_workspace": []
+    },
+    {
+      "name": "B",
+      "arrival": {
+        "converged": true,
+        "frames": 0,
+        "error": {
+          "pos_error_norm_m": 3.8337755540851504e-05,
+          "rot_error_norm_rad": 0.0,
+          "sigma_min_weighted": 0.2999640735356726,
+          "damping": 0.01,
+          "tcp_offset_world_m": [
+            -0.06296265125274658,
+            -4.731118679046631e-06,
+            -0.13504332304000854
+          ],
+          "measured_command_gap_norm_rad": 5.4796496470278525e-05
+        }
+      },
+      "camera": {
+        "position_m": [
+          -0.26071640849113464,
+          -0.06750815361738205,
+          0.9716053009033203
+        ],
+        "right": [
+          0.9063232229566928,
+          2.726338087291609e-05,
+          -0.4225851568454589
+        ],
+        "up": [
+          0.029443346789908415,
+          0.9975657135253141,
+          0.06321183851574227
+        ],
+        "forward": [
+          -0.4215581868335028,
+          0.0697326788158744,
+          -0.9041161698691224
+        ]
+      },
+      "detections": [
+        {
+          "id": 8,
+          "class_id": 0,
+          "class_name": "cube",
+          "conf": 0.9961,
+          "bbox_xyxy": [
+            448.7,
+            160.1,
+            510.7,
+            223.7
+          ],
+          "mask_pixels": 3590,
+          "yolo_class": "cube",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.25,
+            -1e-05,
+            0.62022
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.64524,
+          "height_mm": 50.0,
+          "visible_surface_xyz_m": [
+            -0.2489,
+            -0.0026,
+            0.6452
+          ],
+          "distance_from_camera_m": 0.358,
+          "top_face_size_mm": [
+            50.0,
+            50.0
+          ],
+          "top_face_yaw_deg": 89.98,
+          "footprint_size_mm": [
+            65.5,
+            58.4
+          ],
+          "footprint_yaw_deg": -89.91,
+          "top_face_points": 3225,
+          "shape_check": {
+            "box_dims_mm": [
+              50.0,
+              50.0,
+              50.0
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        },
+        {
+          "id": 1,
+          "class_id": 3,
+          "class_name": "sphere",
+          "conf": 0.9878,
+          "bbox_xyxy": [
+            147.3,
+            188.9,
+            181.2,
+            218.2
+          ],
+          "mask_pixels": 826,
+          "yolo_class": "sphere",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.70123,
+            0.0261,
+            0.62017
+          ],
+          "center_method": "sphere_fit_tangent_to_table",
+          "top_z_m": 0.64348,
+          "height_mm": 49.9,
+          "visible_surface_xyz_m": [
+            -0.6863,
+            0.0236,
+            0.6318
+          ],
+          "distance_from_camera_m": 0.5712,
+          "radius_mm": 25.0
+        },
+        {
+          "id": 7,
+          "class_id": 1,
+          "class_name": "cuboid",
+          "conf": 0.9823,
+          "bbox_xyxy": [
+            198.1,
+            259.2,
+            235.5,
+            305.8
+          ],
+          "mask_pixels": 1243,
+          "yolo_class": "cuboid",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.60168,
+            -0.09819,
+            0.60523
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.61526,
+          "height_mm": 20.1,
+          "visible_surface_xyz_m": [
+            -0.5931,
+            -0.0969,
+            0.6153
+          ],
+          "distance_from_camera_m": 0.5014,
+          "top_face_size_mm": [
+            59.9,
+            40.0
+          ],
+          "top_face_yaw_deg": -70.73,
+          "footprint_size_mm": [
+            68.9,
+            61.3
+          ],
+          "footprint_yaw_deg": -70.73,
+          "top_face_points": 923,
+          "shape_check": {
+            "box_dims_mm": [
+              59.9,
+              40.0,
+              20.1
+            ],
+            "edge_ratio": 2.98,
+            "shape_class": "cuboid"
+          }
+        },
+        {
+          "id": 4,
+          "class_id": 3,
+          "class_name": "sphere",
+          "conf": 0.9778,
+          "bbox_xyxy": [
+            218.4,
+            157.7,
+            245.9,
+            184.3
+          ],
+          "mask_pixels": 606,
+          "yolo_class": "sphere",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.56867,
+            0.06375,
+            0.61515
+          ],
+          "center_method": "sphere_fit_tangent_to_table",
+          "top_z_m": 0.63357,
+          "height_mm": 39.9,
+          "visible_surface_xyz_m": [
+            -0.5587,
+            0.0599,
+            0.6262
+          ],
+          "distance_from_camera_m": 0.489,
+          "radius_mm": 20.0
+        },
+        {
+          "id": 3,
+          "class_id": 2,
+          "class_name": "cylinder",
+          "conf": 0.9708,
+          "bbox_xyxy": [
+            304.0,
+            172.8,
+            355.5,
+            223.3
+          ],
+          "mask_pixels": 2048,
+          "yolo_class": "cylinder",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.41478,
+            0.01102,
+            0.61022
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.62525,
+          "height_mm": 30.0,
+          "visible_surface_xyz_m": [
+            -0.4096,
+            0.0092,
+            0.6252
+          ],
+          "distance_from_camera_m": 0.4006,
+          "top_face_size_mm": [
+            58.5,
+            56.9
+          ],
+          "top_face_yaw_deg": 59.73,
+          "footprint_size_mm": [
+            75.0,
+            64.8
+          ],
+          "footprint_yaw_deg": -30.04,
+          "top_face_points": 1680
+        },
+        {
+          "id": 6,
+          "class_id": 2,
+          "class_name": "cylinder",
+          "conf": 0.9584,
+          "bbox_xyxy": [
+            262.1,
+            242.3,
+            316.6,
+            287.3
+          ],
+          "mask_pixels": 1570,
+          "yolo_class": "cylinder",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.47017,
+            -0.07147,
+            0.61474
+          ],
+          "center_method": "lying_cylinder_fit_tangent_to_table",
+          "top_z_m": 0.63411,
+          "height_mm": 39.1,
+          "visible_surface_xyz_m": [
+            -0.4614,
+            -0.0704,
+            0.6303
+          ],
+          "distance_from_camera_m": 0.4138,
+          "top_face_size_mm": [
+            59.9,
+            20.9
+          ],
+          "top_face_yaw_deg": -22.38,
+          "footprint_size_mm": [
+            86.9,
+            37.9
+          ],
+          "footprint_yaw_deg": -23.99,
+          "top_face_points": 713
+        },
+        {
+          "id": 2,
+          "class_id": 0,
+          "class_name": "cube",
+          "conf": 0.784,
+          "bbox_xyxy": [
+            158.2,
+            250.0,
+            198.5,
+            277.6
+          ],
+          "mask_pixels": 1073,
+          "yolo_class": "cube",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.66873,
+            -0.07077,
+            0.61523
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.63526,
+          "height_mm": 40.1,
+          "visible_surface_xyz_m": [
+            -0.6501,
+            -0.071,
+            0.6322
+          ],
+          "distance_from_camera_m": 0.5417,
+          "top_face_size_mm": [
+            40.0,
+            39.9
+          ],
+          "top_face_yaw_deg": 85.97,
+          "footprint_size_mm": [
+            78.0,
+            41.1
+          ],
+          "footprint_yaw_deg": -4.26,
+          "top_face_points": 549,
+          "shape_check": {
+            "box_dims_mm": [
+              40.0,
+              39.9,
+              40.1
+            ],
+            "edge_ratio": 1.01,
+            "shape_class": "cube"
+          }
+        },
+        {
+          "id": 5,
+          "class_id": 3,
+          "class_name": "sphere",
+          "conf": 0.6473,
+          "bbox_xyxy": [
+            242.5,
+            173.9,
+            286.9,
+            217.5
+          ],
+          "mask_pixels": 1551,
+          "yolo_class": "sphere",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.50295,
+            0.0192,
+            0.62503
+          ],
+          "center_method": "sphere_fit_tangent_to_table",
+          "top_z_m": 0.65357,
+          "height_mm": 59.7,
+          "visible_surface_xyz_m": [
+            -0.4894,
+            0.0151,
+            0.6442
+          ],
+          "distance_from_camera_m": 0.4316,
+          "radius_mm": 29.8
+        },
+        {
+          "id": 9,
+          "class_id": 0,
+          "class_name": "cube",
+          "conf": 0.5582,
+          "bbox_xyxy": [
+            254.2,
+            89.0,
+            332.8,
+            172.0
+          ],
+          "mask_pixels": 3552,
+          "yolo_class": "cube",
+          "depth_valid_fraction": 1.0,
+          "center_xyz_m": [
+            -0.45851,
+            0.09782,
+            0.62523
+          ],
+          "center_method": "top_face_rect",
+          "top_z_m": 0.65525,
+          "height_mm": 60.1,
+          "visible_surface_xyz_m": [
+            -0.4498,
+            0.0885,
+            0.6552
+          ],
+          "distance_from_camera_m": 0.4318,
+          "top_face_size_mm": [
+            60.0,
+            60.0
+          ],
+          "top_face_yaw_deg": -50.86,
+          "footprint_size_mm": [
+            115.3,
+            75.8
+          ],
+          "footprint_yaw_deg": -50.79,
+          "top_face_points": 2154,
+          "shape_check": {
+            "box_dims_mm": [
+              60.0,
+              60.0,
+              60.1
+            ],
+            "edge_ratio": 1.0,
+            "shape_class": "cube"
+          }
+        }
+      ],
+      "unexplained": [],
+      "outside_workspace": []
+    }
+  ],
+  "second_view": {
+    "policy": "on_low_conf",
+    "reasons": [
+      "#9 cube conf 0.20"
+    ],
+    "visited": true
+  },
+  "returned": true,
+  "server": "already_running",
+  "model": "models/best.pt",
+  "timing_s": {
+    "setup": 0.13101863861083984,
+    "A_move": 2.675658702850342,
+    "A_capture": 5.585441827774048,
+    "A_yolo": 0.07132744789123535,
+    "B_move": 2.6743297576904297,
+    "B_capture": 0.4759950637817383,
+    "B_yolo": 0.06633138656616211,
+    "return": 2.700350284576416,
+    "total": 14.587780237197876
+  }
+}
