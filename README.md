@@ -4,13 +4,75 @@
 
 ## Goal
 
-**Demo video** (Google Drive): [▶ Watch the arm detect and pick](https://drive.google.com/file/d/14voByrd4BVBHa-EldbXiBFaAfeXDhiZS/view?usp=sharing)
+In Isaac Sim, an NHC12 arm (Robotiq 2F-85 gripper and a D455 camera on the wrist) finds the blocks of one chosen type on a table and puts them into a basket, one after the other, **without stopping between steps**.
 
-In Isaac Sim, an NHC12 arm (Robotiq 2F-85 gripper and a D455 camera on the wrist) finds blocks of a chosen type on a table and puts them into a basket one by one.
-- There are four block types: `cube`, `cuboid`, `cylinder`, `sphere`.
-- After taking a picture, YOLO gives the type. Depth gives the world position of each object.
-- The object nearest to the camera is picked first. The scene is re-photographed after every pick.
-- Every run writes an HTML report: wrist photos, front photos, and an error report.
+- There are four block types: `cube`, `cuboid`, `cylinder`, `sphere` (20–60 mm).
+- Everything the arm sees comes from the wrist D455 stream: YOLO class and mask and the depth are computed continuously, and the world position of every block is kept up to date while the arm moves.
+- The arm flies one continuous path per leg. It stops only to grasp and to release.
+- The basket is read with the same depth video: a block is put down only on free floor, never on a block that is already there.
+- If every target is blocked by a neighbour, the arm moves the neighbour aside first.
+
+<p align="center"><img src="media/overview.png" width="720" alt="The NHC12 arm, the table with the blocks, and the basket (Isaac Sim)"></p>
+
+### Demo
+
+The three clips are the wrist camera as it was recorded (class, confidence and world position of each block in the top-left corner). Each run was one call, e.g. `detect_pick("sphere")`.
+
+<table>
+  <tr>
+    <th align="center">cylinder</th>
+    <th align="center">sphere</th>
+    <th align="center">cube</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="media/demo_cylinder.gif" width="300" alt="cylinder run, wrist camera"><br><a href="media/demo_cylinder.mp4">mp4</a></td>
+    <td align="center"><img src="media/demo_sphere.gif" width="300" alt="sphere run, wrist camera"><br><a href="media/demo_sphere.mp4">mp4</a></td>
+    <td align="center"><img src="media/demo_cube.gif" width="300" alt="cube run, wrist camera"><br><a href="media/demo_cube.mp4">mp4</a></td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <table>
+        <tr><th>pick</th><th>conf</th><th>arrive to release (s)</th></tr>
+        <tr><td>1</td><td>0.97</td><td>3.15</td></tr>
+        <tr><td>2</td><td>0.96</td><td>4.03</td></tr>
+      </table>
+    </td>
+    <td valign="top">
+      <table>
+        <tr><th>pick</th><th>conf</th><th>arrive to release (s)</th></tr>
+        <tr><td>1</td><td>0.85</td><td>3.40</td></tr>
+        <tr><td>2</td><td>0.90</td><td>3.17</td></tr>
+        <tr><td>3</td><td>0.86</td><td>3.80</td></tr>
+      </table>
+    </td>
+    <td valign="top">
+      <table>
+        <tr><th>pick</th><th>conf</th><th>arrive to release (s)</th></tr>
+        <tr><td>1</td><td>0.51</td><td>3.67</td></tr>
+        <tr><td>2</td><td>0.93</td><td>3.38</td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+*conf* = YOLO confidence when the block was chosen. *arrive to release* = from the moment the hand is at the block to the moment the block is released in the basket (simulation seconds).
+
+## Equipment
+
+| Part | What |
+|---|---|
+| Simulator | NVIDIA Isaac Sim 6.0.0 (scene `scenes/arm310d_d455_ik_demo.usd`) |
+| Arm | Yaskawa Motoman NEXT NHC12, driven by differential IK on a target prim (`/World/IKTarget`) |
+| Gripper | Robotiq 2F-85 (max opening 85 mm, fingers 31 × 27 mm) |
+| Camera | Intel RealSense D455 on the wrist: RGB + depth, 640 × 480, path-traced |
+| Perception | YOLO26n-seg (`models/best.pt`, four classes), run in its own Python environment (`perception/.venv`); depth → world points |
+| Scene | Packing table, basket `container_h20` (floor is a lattice), test blocks with physics (friction 1.0, damping on balls and cylinders) |
+
+YOLO was trained on 328 simulated images (20 blocks, 5 per class; camera 0.43–0.56 m above the table, 9–27° from vertical; 100 epochs; mask mAP50 0.885). Details: `models/train_args.yaml`, `models/train_results.csv`.
+
+## Output storage
+
+All generated reports, videos, images and logs are written under `outputs/`, a symbolic link to `/mnt/data/Lin(sda)/nhc-d455-yolo-2(result only)`. Keep `/mnt/data` mounted before running. Git tracks the link, not the files. The demo clips and the overview picture are stored in `media/`.
 
 ## Usage
 
@@ -22,193 +84,112 @@ bash perception/setup_yolo_env.sh
 
 **Every time after starting Isaac Sim**
 
-1. Open `scenes/arm310d_d455_ik_demo.usd` from this folder in Isaac Sim (no need to press Play; it plays automatically).
-2. Open `demo_start.py` in the Script Editor and press Ctrl+Enter. It starts arm IK, the D455 camera and the YOLO server (about 10 s).
-3. Call from the Script Editor:
+1. Open `scenes/arm310d_d455_ik_demo.usd` from this folder (no need to press Play).
+2. Open `demo_start2.py` in the Script Editor and press Ctrl+Enter **once**. It only gets the arm ready (about 10 s) and prints `demo_start2: READY`. Nothing moves.
+3. Call a function in the Script Editor:
 
 ```python
-detect_pick("sphere")      # pick all spheres on the table into the basket, then open the report
+layout("sphere")          # (testing) 10 new random blocks, all sizes of that type included; basket emptied
+detect_pick("sphere")     # pick every sphere into the basket
 ```
 
-**Functions** (each is independent, any order)
+**Functions**
 
-| Call | What it does | Report |
+| Call | What it does | Result |
 |---|---|---|
-| `detect_pick("sphere")` | Repeats `detect()` → `pick()` until no sphere is left. Opens the report when done | `outputs/pick/<time>/index.html` |
-| `detect()` | Arm goes to the photo pose and takes a picture (a second view if needed) → class, confidence, world position → arm returns home. The result is kept for `pick()` | `outputs/oneclick/<time>/index.html` |
-| `pick("sphere")` | Uses the **last `detect()`** result. Puts the sphere nearest to the camera into the basket, then returns home | `outputs/pick/<time>/index.html` |
-| `pick("sphere", id=3)` | Same, but for a given id from the `detect()` report | same |
-| `layout("sphere")` | (Testing) Re-places 10 random blocks (including spheres) and empties the basket. Blocks live only in memory and are never saved to the scene file | — |
-| `refresh()` | When Isaac Sim gets slow: reopens the scene (no save) and restarts. Test blocks disappear; call `layout()` again if needed | — |
-| `status()` | What is running now (with the current step) and the last result | — |
+| `detect_pick(target)` | `target` = `"cube"` (default) / `"cuboid"` / `"cylinder"` / `"sphere"`. Looks at the table for about 1 s, then picks the blocks of that type one by one into the basket. `max_picks` (default 12) limits the number of picks | `outputs/lab/live/run_<time>/index.html` |
+| `layout()` | (Testing) 10 new random blocks of any type, with physics; basket emptied; the red `object` cube of the original scene is removed for the session (never saved) | prints how many of each type |
+| `layout("sphere")` | Same, but every size of that type (sphere 40/50/60 mm) is on the table, so `detect_pick("sphere")` has something to pick | — |
 
-- **target**: `"cube"` / `"cuboid"` / `"cylinder"` / `"sphere"`. **order_by**: `"camera"` (default, nearest to the camera first) or `"arm_base"`.
-- A call returns `scheduled` at once and the action runs in the background (Isaac Sim must keep updating the screen). Use `status()` to see progress and results.
-- Only one action runs at a time. A call while busy returns `busy`.
-- `pick()` trusts only the latest `detect()`. After any `pick()` / `detect_pick()` / `layout()` the table has changed, so call `detect()` again. Otherwise the call returns `refused` with the reason.
-- While an action runs, the IK target (`/World/IKTarget`) is hidden and shown again at the end.
-- Time: `detect()` takes 10–25 s; `detect_pick()` about 1 minute per object.
-- **Shortcut**: `grasp/one_click_pick.py` (edit `TARGET`, Ctrl+Enter) = run `demo_start.py` + `detect_pick(TARGET)`.
+- Both calls return at once and run in the background; the console prints `started` and `done` (with a short result). Only one action runs at a time; a call while busy prints `[busy]`.
+- You can call `detect_pick()` for several types in a row on the same layout. The basket content is remembered between calls; `layout()` resets it.
+- While an action runs the IK target marker is hidden (it would block the camera).
+- The Script Editor does not reload a file changed on disk. `lab/*.py` is read from disk on every `detect_pick()`, but `layout()` lives in `lab/api2.py`, which is loaded by `demo_start2.py`: after changing `api2.py`, press Ctrl+Enter on `demo_start2.py` again.
+- Time: about 5–6 s per block, plus about 1.5 s for the scan and the way home.
 
-## `detect()`: what it does and what to expect
+**What a run writes** (`outputs/lab/live/run_<time>/`)
 
-Example run: [`outputs/oneclick/20260930_181331/index.html`](outputs/oneclick/20260930_181331/index.html)
-(GitHub shows HTML as source. To view it as a page with images, use the
-[preview link](https://raw.githack.com/hayashimatsu/arm-detect-and-pick/main/outputs/oneclick/20260930_181331/index.html).)
-
-![detect() result, view A](outputs/oneclick/20260930_181331/overlay.png)
-
-*View A (D455 left camera). Each object has an id, a class, and a YOLO confidence. The colored outline is the YOLO mask.*
-
-### Steps
-
-1. **Move.** The arm goes to a fixed photo pose (view A: camera about 0.55 m from the table, 25° from vertical).
-2. **Capture.** The D455 left camera takes an RGB image and a depth image.
-3. **YOLO.** `models/best.pt` (YOLO26n-seg) returns a class, a confidence and a pixel mask for each object. Candidates down to confidence 0.05 are kept for the next steps. YOLO26 has no NMS, so one object can get two boxes; `yolo_server.py` removes the duplicate when two masks overlap by IoU > 0.7 (the higher confidence stays).
-4. **Depth → world.** Every depth pixel is converted to a world point. Only points 8–150 mm above the table inside the workspace count as objects.
-5. **Filter.** Detections with confidence ≥ 0.25 are kept. A low-score candidate is also kept if ≥ 60% of its mask is a real bump above the table and it does not overlap an accepted object. A bump that no mask explains becomes an `unknown` object (position from depth only).
-6. **Position.** For each mask the visible top surface gives the world center. A sphere and a lying cylinder are fitted with their true shape. The result also has a height.
-7. **Cube vs cuboid.** These two are the hardest pair for one RGB image, so the class is decided by the depth-measured edge ratio (longest / shortest edge < 1.15 → `cube`), not by YOLO.
-8. **Second view (only if needed).** If any object has confidence < 0.7, or some depth is unexplained, the arm also goes to view B (about 0.38 m, 25°) and repeats steps 2–7. Objects are matched between views by world XY (≤ 30 mm). View B's class is used only if view A's confidence is < 0.7. The center always comes from view A.
-9. **Return and report.** The arm goes back home. The HTML and `result.json` are written.
-
-### How YOLO was trained
-
-| Item | Value |
+| File | Content |
 |---|---|
-| Model | YOLO26n-seg (instance segmentation), starting from the pretrained `yolo26n-seg.pt` |
-| Classes | `cube`, `cuboid`, `cylinder`, `sphere` (`models/data.yaml`) |
-| Data | 328 images of the simulated table (31 original + 3 batches of about 99), showing 20 registered blocks: 5 cube, 5 cuboid, 5 cylinder, 5 sphere |
-| Camera in the data | About 7 fixed poses: 0.43–0.56 m above the table, looking down, 9–27° from vertical |
-| Training | 100 epochs, AdamW, batch 4, image size 640 (`models/train_args.yaml`) |
-| Augmentation | Small color shift (hsv 0.015 / 0.4 / 0.2), translate 0.1, scale 0.2, horizontal flip 0.5. No rotation, no mosaic |
-| Final validation (epoch 100) | Mask: precision 0.83, recall 0.85, mAP50 0.885, mAP50-95 0.820 (`models/train_results.csv`, curves and `models/confusion_matrix.png`) |
+| `index.html` | Video, one row per pick (class, confidence, seconds), which blocks moved |
+| `wrist.mp4` | Annotated wrist video; top-left list `#id class conf x y z d` updated every frame |
+| `result.json` | Every number: events with sim-seconds, grasp data, tug test, basket spots, tracks vs. stage values |
+| `frames/` | Single annotated frames |
 
-- **Expected**: for blocks 20–60 mm on this table, seen from view A (inside the training camera range), YOLO gives the right class with high confidence and a mask that follows the outline. Cube and cuboid can be mixed up (the same face can look square), so the depth edge ratio decides between them. Views far from the training range (closer, more tilted) are worse, not better.
-- **Accuracy over 163 test objects** (14 random layouts): all objects found, all classes correct, center error at most 1.2 mm.
-- **This run** (9 objects, 14.6 s in total):
+(The older two-photo flow with `detect()` / `pick()` is still in the repository: `demo_start.py`, `grasp/`. It is not changed.)
 
-| id | class | conf | center X, Y, Z (m) | height (mm) |
-|---|---|---|---|---|
-| 1 | sphere | 0.99 | −0.7005, 0.0264, 0.6200 | 49.6 |
-| 2 | cube | 0.98 | −0.6687, −0.0708, 0.6152 | 40.0 |
-| 3 | cylinder | 0.98 | −0.4150, 0.0109, 0.6102 | 30.0 |
-| 4 | sphere | 0.97 | −0.5680, 0.0640, 0.6151 | 39.8 |
-| 5 | sphere | 0.97 | −0.5019, 0.0195, 0.6250 | 59.5 |
-| 6 | cylinder | 0.96 | −0.4704, −0.0714, 0.6149 | 39.3 |
-| 7 | cuboid | 0.95 | −0.6017, −0.0982, 0.6052 | 20.0 |
-| 8 | cube | 0.94 | −0.2500, −0.0003, 0.6202 | 50.1 |
-| 9 | cube | 0.20 | −0.4585, 0.0978, 0.6252 | 60.1 |
-
-  - All 9 objects have the right class. Centers match the stage values within 0.6 mm (see the error rows in the HTML).
-  - #9 got confidence 0.20 in view A, so the arm visited view B (confidence 0.56 there). The class `cube` was confirmed by the depth edge ratio, not by YOLO.
-  - Stage values in the HTML are for comparison only. The robot never uses them.
-
-More files in the run folder: `result.json` (all numbers, per view), `view_A/`, `view_B/` (RGB, depth, masks, camera pose), `gt_eval_only.json` (stage values, for checking only).
-
-## `detect_pick()`: before and after
-
-Example run: [`outputs/pick/20260930_181324/index.html`](outputs/pick/20260930_181324/index.html)
-([preview link](https://raw.githack.com/hayashimatsu/arm-detect-and-pick/main/outputs/pick/20260930_181324/index.html)).
-The call was `detect_pick("sphere")`. It repeated `detect()` → `pick()` until no sphere was left.
-**Result: 3 / 3 spheres in the basket, no errors, 195 s.**
-
-| Before (front camera) | After (front camera) |
-|---|---|
-| ![before](outputs/pick/20260930_181324/front_start.png) | ![after](outputs/pick/20260930_181324/front_after_pick3.png) |
-
-The full report also has the wrist photo of each pick over the basket, the grasp data (gripper yaw, finger stop angle), and the link to the `detect()` report used for each pick.
-
-## How it works
-
-### Picking (`pick()`)
-- Grasp direction: fingers point straight down and close on the short side. If a finger would hit a neighbor, the yaw is changed (±15°, ±30°, 90°; every 15° for round objects). If nothing works, the object is skipped.
-- Grasp height: object center; lower for short objects so the pads touch solid material. It also allows for the fingertips moving down 8–13 mm when they close, so the pads do not hit the table first.
-- Closing: (1) close at once to the angle where each pad is 3 mm from the object, using the detected width (fast); (2) then 1° at a time, waiting for the fingers to follow. The first time a finger lags by ≥ 1°, it has touched the object, and the force is still small; (3) then close only 5° more, again step by step, so the force is small and constant. It never closes with full force, so the pads do not press into a sphere or box. The report records pad gap and object width for each grasp, so the grip depth can be read directly.
-- On failure (nothing grasped, or dropped on the way): re-photograph and retry. Two failures at the same place → skip and write it in the error report.
-- Carrying: after grasping, the first 12 cm above the table is lifted slowly; after that the arm moves at the same speed as when approaching. Finger closure is checked after each move.
-- Placing: a depth image of the basket is taken from above, and the empty cell nearest to the arm is chosen.
-
-### `detect_pick(target)`
+## Flow of `detect_pick(target)`
 
 ```mermaid
 flowchart TD
-    S["demo_start.py (run once)<br/>Play, arm IK, camera, YOLO server"] --> D
-    D["detect()<br/>arm to photo pose, photo → class and world position of each object → arm home"] --> Q{"Any target left on the table?"}
-    Q -- No --> R["Done: write pick report (with error report)"]
-    Q -- Yes --> P["pick(target)<br/>using the detect() result: choose the one nearest to the camera that the fingers can reach<br/>open → descend → grasp → carry to basket → release → home"]
-    P --> D
+    S["demo_start2.py (once)<br/>arm IK, D455 stream, YOLO video server"] --> L["layout(): test blocks (optional)"]
+    L --> A["detect_pick(target)"]
+    A --> V["Fly to the photo pose and scan about 1 s<br/>video tracker: class, confidence, world position of every block"]
+    V --> T{"A target the fingers can reach?<br/>(nearest to the hand)"}
+    T -- yes --> F
+    T -- "no, but targets left" --> C["Make room: other wrist angles → move a blocking neighbour<br/>to a free table spot (chains allowed) → tighter finger clearance"]
+    C --> F
+    F["One continuous leg to above the block, then down<br/>end point re-aimed from the live track"] --> G["Close: ramp until contact, squeeze 5°<br/>tug test: lift 12 mm, finger must hold"]
+    G --> K{"Firm grip?"}
+    K -- no --> R["Open, go up, scan again<br/>(same place failed twice: skip)"]
+    R --> T
+    K -- yes --> P["Carry at travel height over the basket<br/>free spot from the basket map, checked again in flight<br/>lower onto the floor, open, leave slowly"]
+    P --> M{"Target tracks left?"}
+    M -- yes --> T
+    M -- no --> H["Straight home, write report"]
 ```
 
-| Function | Needs | Produces |
+| Step | Needs | Produces |
 |---|---|---|
-| `demo_start.py` | Isaac Sim with this folder's scene open | Arm, camera and YOLO ready |
-| `detect()` | `demo_start.py` has run | Object list (id, class, confidence, world position) + report `outputs/oneclick/<time>/` |
-| `pick(target)` | Latest `detect()` result (table not touched since) | One object in the basket + pick report `outputs/pick/<time>/` (wrist photos, front photos, error report) |
-| `detect_pick(target)` | `demo_start.py` has run | The loop above, one pick report |
+| `demo_start2.py` | Isaac Sim with this folder's scene open | Arm IK ready |
+| `layout()` | `demo_start2.py` has run | New test blocks, empty basket, basket memory reset |
+| `detect_pick(target)` | `demo_start2.py` has run | Blocks in the basket, report `outputs/lab/live/run_<time>/` |
 
-### Knowing when a task did not finish
+## How it works
 
- the error report at the top of the report lists each problem with "what happened / likely cause / what was decided".
+### Perception
 
-| Type | Meaning | What the program does |
-|---|---|---|
-| Fewer in basket than expected | Targets in the basket < targets on the table | Lists each missing object with its reason |
-| wrong_class | The object picked is not the requested class | Records it, puts it in the basket, continues |
-| missed_grasp | The gripper closed on nothing | Re-photograph and retry; 2 failures at the same place → skip |
-| dropped | Dropped during lift or carry | Re-photograph and retry; same as above |
-| not_in_basket | Not in the basket after release | Records it |
-| skipped (blocked) | At every tried angle the fingers would hit a neighbor | Skips it and reports |
+The D455 depth image is turned into world coordinates frame by frame: every pixel becomes a point in the world using the camera pose of that very frame, the points standing above the table are the blocks, and the visible top of each block gives its centre and size. Recognition keeps running in the background and the arm never waits for it: it plans from the positions seen while it was still, and only nudges the end of its path with the live position as it comes down.
 
-### When stuck
+### Picking
 
- the `error` field of `status()` has the reason (with the Python traceback). In the progress files `outputs/pick/latest_status.json` and `outputs/oneclick/latest_status.json`, `step` is where it stopped (for example `pick2:lift`).
+The arm goes for the reachable target nearest to its hand and closes the fingers across the short side, turning the wrist if a neighbour is in the way; if every target is blocked, it first moves a blocking neighbour aside. After closing it lifts the block a few millimetres and checks the grip: if the fingers hold, it carries on; if not, it lets go and looks again.
+
+### Placing
+
+**Spot.** Once the block is in the gripper, the arm takes the free place in the basket nearest to itself, one where both the block and the open fingers fit without touching anything.
+
+**Check in flight.** While carrying the block over the basket the arm looks at the basket once more; if something has come into the way, it bends the end of its path to the nearest free place without stopping, and only then lowers the block and lets go.
 
 ## Folder layout
 
 | Path | Content |
 |---|---|
-| `demo_start.py` | **Entry point**: run once, then call `detect()` / `pick()` / `detect_pick()` etc. |
-| `grasp/pick.py` | Pick flow (the body of `detect()` / `pick()` / `detect_pick()`, reports) |
-| `grasp/planner.py` | Grasp direction, opening width, grasp height, basket cells (pure computation) |
-| `grasp/one_click_pick.py` | Shortcut: `demo_start.py` + `detect_pick(TARGET)` |
-| `perception/one_click.py` | Perception flow (photo poses, YOLO, depth → world position, report) |
-| `perception/geometry.py` | Depth → world points, shape fitting |
-| `perception/yolo_server.py` | YOLO inference (separate Python environment, started by `detect()`) |
-| `perception/config.json` | Photo poses, workspace, table height, model and YOLO environment paths |
-| `perception/place_test_blocks.py` | Test blocks (used by `layout()`) |
-| `perception/setup_yolo_env.sh`, `requirements.lock.txt` | Build the YOLO environment |
-| `scripts/` | Low level arm and camera code: `ik_controller.py`, `gripper_controller.py`, `pose_math.py`, `d455_capture.py`, `prim_cache.py` |
-| `models/best.pt` | Trained YOLO26n-seg, with training args, results and confusion matrix |
-| `scenes/`, `assets/` | Scene, robot and table assets (the scene refers to assets by relative path). **Do not save over the scene** |
-| `outputs/` | Only the two example reports above are in git. Other runs are ignored |
+| `demo_start2.py` | **Entry point**: Ctrl+Enter once, then call `layout()` / `detect_pick()`. A short loader for `lab/api2.py` |
+| `lab/api2.py` | `layout()` and `detect_pick()` |
+| `lab/live_pick.py` | The pick loop (scan, choose, make room, fly, close, check, place), the HTML report |
+| `lab/live_perception.py` | Perception: D455 stream, YOLO + depth, tracker, basket map |
+| `lab/fast_pick.py` | Continuous trajectory, gripper close / release, all parameters (`P`) |
+| `lab/yolo_live.py` | Low-latency YOLO server (port 18778, started automatically) |
+| `lab/README-lab.md` | Notes of the lab version |
+| `lab/seq_eval.py`, `class_eval.py`, `phys_test.py`, … | Test harnesses (not needed for normal use) |
+| `grasp/planner.py` | Grasp angle, opening width, grasp height (pure computation, shared with the old flow) |
+| `perception/` | `geometry.py` (depth → world points, shape fitting), `yolo_server.py`, `config.json` (photo pose, workspace, table height), `setup_yolo_env.sh` |
+| `scripts/` | Low-level arm and camera code (IK, gripper, pose math, D455 capture) |
+| `models/best.pt` | Trained YOLO26n-seg with its training files |
+| `scenes/`, `assets/` | Scene, robot and table assets. **Do not save over the scene** (test blocks live in the session layer) |
+| `media/` | The overview picture and demo clips shown above |
+| `outputs/` | Symbolic link to the result disk; all generated files, outside Git |
 
-## Verified range and future risks
+## Known limits
 
-**Verified** (2026-09-30, final version): for each target, `layout()` placed 10 random blocks, then `detect_pick()` ran.
-
-| target | result | time | pad depth into object (per side) |
-|---|---|---|---|
-| sphere | 3/3 | 151 s | 1.2–1.3 mm |
-| cuboid | 3/3 | 147 s | ≤ 1.4 mm |
-| cube | 4/4 | 194 s | 0.4–1.0 mm |
-| cylinder (incl. lying) | 4/4 | 189 s | ≤ 1.6 mm |
-
-- Total 14/14, 0 errors, about 49 s per object.
-- Pad depth is computed from the real width. A larger value in a report means the perceived width was too large (tilted grasp, lying cylinder), not a deep grip.
-- Works when the timeline is stopped at start. About 41 FPS after a long run.
-- Perception: 163 objects all found, all classes correct, center error at most 1.2 mm.
-
-| # | Risk | Status / possible answer |
+| # | Limit | Status / possible answer |
 |---|---|---|
-| 1 | Objects too close, fingers cannot go down | Tried 0/±15/±30/90° (every 15° for round). Then skip and report. Answer: move the neighbor first, or push |
-| 2 | Lying cylinders and spheres roll | Re-detected every cycle so they are followed. One that rolls into the basket or out of reach is missed |
-| 3 | Width too large (lying cylinder, tilted cube, by 5–15 mm) | The fast approach stops slightly early (about 30 steps more). Grasp is not affected. Answer: use the fitted diameter or edge instead of the outer box |
-| 4 | Training range of the model | Camera 0.43–0.56 m high, 9–27° tilt, objects 40–80 mm. Other sizes, colors, lighting or tables need re-check or retraining |
-| 5 | Object > 60–70 mm, heavy, or slippery | Max gripper opening 85 mm. Force = 5° closing after touch (small, constant). Friction 1.0, block 0.05 kg. Heavier or slipperier objects may need a larger `SQUEEZE_DEG` or slower carrying (`grasp/pick.py`) |
-| 6 | Basket full | Empty cell chosen by depth. When full, objects stack or fall out; only found afterwards by "not_in_basket" |
-| 7 | IK cannot reach | Far side of the table and deep basket corners are not systematically tested |
-| 8 | Simulator display and physics out of sync | Test blocks are in the session layer; the edit target must be the session layer. Keep this when changing the scene flow |
-| 9 | Capture freeze (handled) | In Isaac Sim 6.0, Replicator `step_async()` turns off timeline auto-update and waits forever, so arm and physics freeze. A watchdog restores it after 5 s (5 s extra per capture). The scene's timeline has only 1 frame (−1→0), which may be one cause |
-| 10 | Getting slower over time (handled) | Every call used to create a new `Articulation` / `XformPrim`, leaving physics views behind. Now one shared object is used (`scripts/prim_cache.py`); new code must use `cached_prim()` too. If still slow, use `refresh()` |
-| 11 | Move to a real robot | Ground truth is used only in reports. Grasp success is judged by finger angle; a real robot needs calibration of gripper angle and force |
+| 1 | Blocks so close that no finger pose fits | Wrist angles, moving a neighbour aside and tighter clearance solve most clusters; a ring of blocks that block each other needed the 2 mm tier. The 2 mm and 3 mm tiers are only checked in simulation |
+| 2 | Spheres and lying cylinders roll | Damping is set in the test scene; a block that rolls out of reach is only found by the next scan |
+| 3 | A grasp can slip | Tug test and re-scan; two failures at the same place → skipped |
+| 4 | Basket memory | Placements are remembered and the map is refreshed whenever the camera sees the basket; blocks moved by hand without a view of them are noticed only when the hand passes over them |
+| 5 | Model range | Trained for 20–60 mm blocks, camera 0.43–0.56 m high; other sizes, colours, lighting or tables need a re-check or retraining |
+| 6 | Heavy or slippery objects | Opening ≤ 85 mm (width ≤ 70 mm used); grip force = 5° after touch |
+| 7 | Not yet run by a person | Tested through the MCP with `demo_start2.py` loaded; not yet run by pressing Ctrl+Enter in the Script Editor |
+| 8 | Real robot | Stage values are used only in reports. Grasp success is judged from the finger angle; a real robot needs gripper calibration |

@@ -80,10 +80,15 @@ def _sat_rect_rect(p, q):
     return True
 
 
+def _cross2(a, b):
+    # 2-D cross product (np.cross rejects 2-D vectors in NumPy >= 2.5)
+    return a[0] * b[1] - a[1] * b[0]
+
+
 def _rect_circle(p, c, r):
     # distance from circle center to polygon (inside -> 0)
-    inside = all(np.cross(p[(i + 1) % 4] - p[i], c - p[i]) >= 0 for i in range(4)) or \
-        all(np.cross(p[(i + 1) % 4] - p[i], c - p[i]) <= 0 for i in range(4))
+    inside = all(_cross2(p[(i + 1) % 4] - p[i], c - p[i]) >= 0 for i in range(4)) or \
+        all(_cross2(p[(i + 1) % 4] - p[i], c - p[i]) <= 0 for i in range(4))
     if inside:
         return True
     d = min(np.linalg.norm(c - (p[i] + np.clip(np.dot(c - p[i], p[(i + 1) % 4] - p[i]) / np.dot(p[(i + 1) % 4] - p[i], p[(i + 1) % 4] - p[i]), 0, 1) * (p[(i + 1) % 4] - p[i])))
