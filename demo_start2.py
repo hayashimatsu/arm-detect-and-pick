@@ -1,5 +1,5 @@
 """demo_start2.py -- Isaac Sim Script Editor: open this file, Ctrl+Enter ONCE (scene scenes/arm310d_d455_ik_demo.usd open).
-Video-mode version of demo_start.py. It only gets the arm ready and prints "demo_start2: READY". Two functions:
+It only gets the arm ready and prints "demo_start2: READY". Two functions:
 
     layout("sphere")        (testing) 10 new random blocks, every size of that type included; basket emptied;
                             the original red cube is removed.   layout() = any 10 random blocks.
@@ -9,7 +9,7 @@ Video-mode version of demo_start.py. It only gets the arm ready and prints "demo
                               - grasp = one continuous close, place = put down on the basket floor (never dropped).
                             Report: outputs/lab/live/run_<time>/index.html (annotated wrist video, times, what moved).
 
-demo_start.py (the original photo version) is untouched and still works. See lab/README-lab.md.
+See lab/README-lab.md.
 """
 import os
 import omni.usd

@@ -1,10 +1,9 @@
-# arm-detect-and-pick, lab version (video mode)
+# arm-detect-and-pick: how demo_start2 works (notes)
 
-> 原本的版本是專案根目錄的 `README.md` / `demo_start.py`，**完全沒動**，照舊可用。這裡是 `lab/` 的新版本，用 `demo_start2.py` 啟動。
 
 ## Goal
 
-Same task as the original (NHC12 arm + wrist D455 picks blocks of one type into the basket), with three changes:
+The NHC12 arm with the wrist D455 picks blocks of one type into the basket, with these properties:
 - **Video instead of two photos.** The wrist D455 streams; YOLO + depth run on the video, so class, confidence, world position and distance are tracked continuously. The annotated video has one list in the top-left corner that changes as the arm moves.
 - **Continuous motion.** One trajectory per leg, no stop except at the grasp and the place.
 - **Grasp without stop-and-go, place without dropping.** One continuous close plus a firm squeeze; the block is lowered onto the basket floor and released there.
@@ -29,7 +28,7 @@ detect_pick("sphere")     # pick every sphere into the basket, video mode
 
 - Both calls return at once and run in the background; the console prints `started` and `done` (with a short result). Only one action runs at a time.
 - The Script Editor does not reload a file that changed on disk. `lab/api2.py` and the modules it uses are read from disk on every `detect_pick()`, so the newest code runs; only `demo_start2.py` itself is the loader.
-- If Isaac Sim gets slow, use the original `refresh()` from `demo_start.py` (it reopens the scene); then run `demo_start2.py` again.
+- If Isaac Sim gets slow, reopen `scenes/arm310d_d455_ik_demo.usd` (no save) and run `demo_start2.py` again.
 
 ## What you get
 
@@ -52,6 +51,7 @@ detect_pick("sphere")     # pick every sphere into the basket, video mode
 - The positions used for control come from the still scan (and re-scans after a failed grasp); while the arm moves the video keeps showing live numbers, but they are not used to steer except the live end-point correction in step 3.
 - Blocks too close together ("fingers blocked by neighbours") are skipped, so a run can stop with some blocks left.
 - Tested through the MCP with `demo_start2.py` loaded; **not** yet run by pressing Ctrl+Enter in the Script Editor by a person.
+- Success rates are being re-measured on the clean flow (see `lab/user-review/feedback-2.md`, steps 2 and 4); the numbers in `STATUS.md` are the latest.
 
 ## Files
 
@@ -63,5 +63,6 @@ detect_pick("sphere")     # pick every sphere into the basket, video mode
 | `lab/live_perception.py` | Video mode: stream, YOLO + depth per frame, tracker, annotated frames |
 | `lab/fast_pick.py` | Continuous trajectory, gripper close / release, parameters (`P`) |
 | `lab/yolo_live.py` | Low-latency YOLO server for the video (port 18778, started automatically; log `outputs/lab/yolo_live.log`) |
+| `lab/user-review/` | The user's reviews and the task list |
 | `lab/debug_release.py`, `lab/release_debug_report.py`, `lab/batch2.py`, `lab/diag_*.py`, `lab/measure_speed.py` | Test and diagnosis tools (not needed for normal use) |
 | `outputs/lab/` | Everything the lab code writes (symbolic link to the result disk) |

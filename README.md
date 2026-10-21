@@ -116,27 +116,25 @@ detect_pick("sphere")     # pick every sphere into the basket
 | `result.json` | Every number: events with sim-seconds, grasp data, tug test, basket spots, tracks vs. stage values |
 | `frames/` | Single annotated frames |
 
-(The older two-photo flow with `detect()` / `pick()` is still in the repository: `demo_start.py`, `grasp/`. It is not changed.)
-
 ## Flow of `detect_pick(target)`
 
 ```mermaid
 flowchart TD
-    S["demo_start2.py (once)<br/>arm IK, D455 stream, YOLO video server"] --> L["layout(): test blocks (optional)"]
+    S["Start up (once)"] --> L["layout() test blocks"]
     L --> A["detect_pick(target)"]
-    A --> V["Fly to the photo pose and scan about 1 s<br/>video tracker: class, confidence, world position of every block"]
-    V --> T{"A target the fingers can reach?<br/>(nearest to the hand)"}
-    T -- yes --> F
-    T -- "no, but targets left" --> C["Make room: other wrist angles → move a blocking neighbour<br/>to a free table spot (chains allowed) → tighter finger clearance"]
+    A --> V["Scan the table"]
+    V --> T{"Reachable target?"}
+    T -- yes --> F["Fly above block"]
+    T -- "blocked" --> C["Make room"]
     C --> F
-    F["One continuous leg to above the block, then down<br/>end point re-aimed from the live track"] --> G["Close: ramp until contact, squeeze 5°<br/>tug test: lift 12 mm, finger must hold"]
+    F --> G["Grasp and tug test"]
     G --> K{"Firm grip?"}
-    K -- no --> R["Open, go up, scan again<br/>(same place failed twice: skip)"]
+    K -- no --> R["Release, rescan"]
     R --> T
-    K -- yes --> P["Carry at travel height over the basket<br/>free spot from the basket map, checked again in flight<br/>lower onto the floor, open, leave slowly"]
-    P --> M{"Target tracks left?"}
+    K -- yes --> P["Carry and place"]
+    P --> M{"Targets left?"}
     M -- yes --> T
-    M -- no --> H["Straight home, write report"]
+    M -- no --> H["Go home"]
 ```
 
 | Step | Needs | Produces |
@@ -173,7 +171,7 @@ The arm goes for the reachable target nearest to its hand and closes the fingers
 | `lab/yolo_live.py` | Low-latency YOLO server (port 18778, started automatically) |
 | `lab/README-lab.md` | Notes of the lab version |
 | `lab/seq_eval.py`, `class_eval.py`, `phys_test.py`, … | Test harnesses (not needed for normal use) |
-| `grasp/planner.py` | Grasp angle, opening width, grasp height (pure computation, shared with the old flow) |
+| `grasp/planner.py` | Grasp angle, opening width, grasp height (pure computation) |
 | `perception/` | `geometry.py` (depth → world points, shape fitting), `yolo_server.py`, `config.json` (photo pose, workspace, table height), `setup_yolo_env.sh` |
 | `scripts/` | Low-level arm and camera code (IK, gripper, pose math, D455 capture) |
 | `models/best.pt` | Trained YOLO26n-seg with its training files |
